@@ -29,14 +29,17 @@ Vertex fracture_clinic(const Graph<Vertex, Distance>& graph)
 	Distance max = 0;
 	for (auto& i : distances)
 	{
-		i.second.first = i.second.first / i.second.second;
-		if (i.second.first > max)
-			max = i.second.first;
+		if (i.second.second != 0) // проверка на деление на 0, чтобы избежать ошибки
+		{
+			i.second.first = i.second.first / i.second.second;
+			if (i.second.first > max)
+				max = i.second.first;
+		}
 	}
-
+	const double tolerance = 0.001; // определенная точность сравнения
 	for (auto const& pair : distances)
 	{
-		if (pair.second.first == max)
+		if (std::abs(pair.second.first - max) < tolerance) // сравнение с определенной точностью
 			return pair.first;
 	}
 }
